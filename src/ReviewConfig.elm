@@ -16,17 +16,31 @@ import NoUnused.Variables
 import NoUnusedPorts
 import Review.Rule as Rule exposing (Rule)
 import UseCamelCase
+import Vendor.NoBooleanCase as NoBooleanCase
+import Vendor.NoLeftPizza as NoLeftPizza
+import Vendor.NoRedundantConcat as NoRedundantConcat
+import Vendor.NoRedundantCons as NoRedundantCons
 
 
 config : List Rule
 config =
     [ NoAlways.rule
+    , NoBooleanCase.rule
     , NoDebug.Log.rule
     , NoDebug.TodoOrToString.rule
     , NoDuplicatePorts.rule
     , NoExposingEverything.rule
     , NoImportingEverything.rule []
+    , NoLeftPizza.rule
+        |> Rule.ignoreErrorsForDirectories
+            [ -- Test functions are traditionally built up using a left pizza.
+              -- While we don't want them in our regular code, let's allow them
+              -- just for tests.
+              "tests/"
+            ]
     , NoMissingTypeAnnotation.rule
+    , NoRedundantConcat.rule
+    , NoRedundantCons.rule
     , NoUnsafePorts.rule NoUnsafePorts.any
     , NoUnused.CustomTypeConstructors.rule []
     , NoUnused.Dependencies.rule

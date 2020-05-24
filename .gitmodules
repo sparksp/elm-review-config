@@ -1,0 +1,12 @@
+[submodule "vendor/noredundantconcat"]
+	path = vendor/noredundantconcat
+	url = https://github.com/truqu/elm-review-noredundantconcat.git
+[submodule "vendor/noleftpizza"]
+	path = vendor/noleftpizza
+	url = https://github.com/truqu/elm-review-noleftpizza.git
+[submodule "vendor/noredundantcons"]
+	path = vendor/noredundantcons
+	url = https://github.com/truqu/elm-review-noredundantcons.git
+[submodule "vendor/nobooleancase"]
+	path = vendor/nobooleancase
+	url = https://github.com/truqu/elm-review-nobooleancase.git
