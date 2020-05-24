@@ -17,7 +17,9 @@ import NoUnusedPorts
 import Review.Rule as Rule exposing (Rule)
 import UseCamelCase
 import Vendor.NoBooleanCase as NoBooleanCase
+import Vendor.NoFullyAppliedPrefixOperator as NoFullyAppliedPrefixOperator
 import Vendor.NoLeftPizza as NoLeftPizza
+import Vendor.NoListLiteralsConcat as NoListLiteralsConcat
 import Vendor.NoRedundantConcat as NoRedundantConcat
 import Vendor.NoRedundantCons as NoRedundantCons
 
@@ -30,6 +32,7 @@ config =
     , NoDebug.TodoOrToString.rule
     , NoDuplicatePorts.rule
     , NoExposingEverything.rule
+    , NoFullyAppliedPrefixOperator.rule
     , NoImportingEverything.rule []
     , NoLeftPizza.rule
         |> Rule.ignoreErrorsForDirectories
@@ -38,6 +41,7 @@ config =
               -- just for tests.
               "tests/"
             ]
+    , NoListLiteralsConcat.rule
     , NoMissingTypeAnnotation.rule
     , NoRedundantConcat.rule
     , NoRedundantCons.rule
