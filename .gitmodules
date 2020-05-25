@@ -13,3 +13,6 @@
 [submodule "vendor/review-simplification"]
 	path = vendor/review-simplification
 	url = https://github.com/jfmengels/review-simplification.git
+[submodule "vendor/review-tea"]
+	path = vendor/review-tea
+	url = https://github.com/jfmengels/review-tea.git
