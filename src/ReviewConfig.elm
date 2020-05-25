@@ -20,9 +20,12 @@ import UseCamelCase
 import Vendor.NoBooleanCase as NoBooleanCase
 import Vendor.NoFullyAppliedPrefixOperator as NoFullyAppliedPrefixOperator
 import Vendor.NoLeftPizza as NoLeftPizza
+import Vendor.NoMissingSubscriptionsCall as NoMissingSubscriptionsCall
+import Vendor.NoRecursiveUpdate as NoRecursiveUpdate
 import Vendor.NoRedundantConcat as NoRedundantConcat
 import Vendor.NoRedundantCons as NoRedundantCons
 import Vendor.NoUnused.Patterns as NoUnusedPatterns
+import Vendor.NoUselessSubscriptions as NoUselessSubscriptions
 
 
 config : List Rule
@@ -46,7 +49,9 @@ config =
               -- just for tests.
               "tests/"
             ]
+    , NoMissingSubscriptionsCall.rule
     , NoMissingTypeAnnotation.rule
+    , NoRecursiveUpdate.rule
     , NoRedundantConcat.rule
     , NoRedundantCons.rule
     , NoUnsafePorts.rule NoUnsafePorts.any
@@ -57,6 +62,7 @@ config =
     , NoUnusedPatterns.rule
     , NoUnusedPorts.rule
     , NoUnused.Variables.rule
+    , NoUselessSubscriptions.rule
     , UseCamelCase.rule UseCamelCase.default
     ]
         |> List.map
