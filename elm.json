@@ -13,8 +13,9 @@
             "jfmengels/review-common": "1.0.0",
             "jfmengels/review-debug": "2.0.1",
             "jfmengels/review-unused": "2.0.3",
-            "sparksp/elm-review-always": "1.0.1",
+            "sparksp/elm-review-always": "1.0.3",
             "sparksp/elm-review-camelcase": "1.0.2",
+            "sparksp/elm-review-forbidden-words": "1.0.0",
             "sparksp/elm-review-ports": "1.2.0",
             "stil4m/elm-syntax": "7.1.1"
         },

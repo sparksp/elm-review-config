@@ -5,6 +5,7 @@ import NoDebug.Log
 import NoDebug.TodoOrToString
 import NoDuplicatePorts
 import NoExposingEverything
+import NoForbiddenWords
 import NoImportingEverything
 import NoMissingTypeAnnotation
 import NoUnsafePorts
@@ -32,6 +33,10 @@ config =
     , NoDebug.TodoOrToString.rule
     , NoDuplicatePorts.rule
     , NoExposingEverything.rule
+    , NoForbiddenWords.rule
+        [ "- [ ]"
+        , "TODO"
+        ]
     , NoFullyAppliedPrefixOperator.rule
     , NoImportingEverything.rule []
     , NoLeftPizza.rule
