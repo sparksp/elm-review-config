@@ -23,6 +23,7 @@ import Vendor.NoLeftPizza as NoLeftPizza
 import Vendor.NoListLiteralsConcat as NoListLiteralsConcat
 import Vendor.NoRedundantConcat as NoRedundantConcat
 import Vendor.NoRedundantCons as NoRedundantCons
+import Vendor.NoUnused.Patterns as NoUnusedPatterns
 
 
 config : List Rule
@@ -55,8 +56,9 @@ config =
     , NoUnused.Dependencies.rule
     , NoUnused.Exports.rule
     , NoUnused.Modules.rule
-    , NoUnused.Variables.rule
+    , NoUnusedPatterns.rule
     , NoUnusedPorts.rule
+    , NoUnused.Variables.rule
     , UseCamelCase.rule UseCamelCase.default
     ]
         |> List.map
