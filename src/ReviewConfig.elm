@@ -24,6 +24,7 @@ import Vendor.NoMissingSubscriptionsCall as NoMissingSubscriptionsCall
 import Vendor.NoRecursiveUpdate as NoRecursiveUpdate
 import Vendor.NoRedundantConcat as NoRedundantConcat
 import Vendor.NoRedundantCons as NoRedundantCons
+import Vendor.NoUnused.Parameters as NoUnusedParameters
 import Vendor.NoUnused.Patterns as NoUnusedPatterns
 import Vendor.NoUselessSubscriptions as NoUselessSubscriptions
 
@@ -59,6 +60,7 @@ config =
     , NoUnused.Dependencies.rule
     , NoUnused.Exports.rule
     , NoUnused.Modules.rule
+    , NoUnusedParameters.rule
     , NoUnusedPatterns.rule
     , NoUnusedPorts.rule
     , NoUnused.Variables.rule

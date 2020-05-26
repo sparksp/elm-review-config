@@ -1,6 +1,6 @@
-module Vendor.NoUnused.Patterns exposing (rule)
+module Vendor.NoUnused.Parameters exposing (rule)
 
-{-| Report useless patterns and pattern values that are not used.
+{-| Report parameters that are not used.
 
 
 # Rule
@@ -9,6 +9,7 @@ module Vendor.NoUnused.Patterns exposing (rule)
 
 -}
 
+import Elm.Syntax.Declaration as Declaration exposing (Declaration)
 import Elm.Syntax.Expression as Expression exposing (Expression)
 import Elm.Syntax.ModuleName exposing (ModuleName)
 import Elm.Syntax.Node as Node exposing (Node(..))
@@ -21,59 +22,70 @@ import Set exposing (Set)
 import Vendor.NoUnused.Patterns.NameVisitor as NameVisitor
 
 
-{-| Report useless patterns and pattern values that are not used.
+{-| Report parameters that are not used.
 
     config =
-        [ NoUnused.Patterns.rule
+        [ NoUnused.Parameters.rule
         ]
 
-This rule looks within let..in blocks and case branches to find any patterns that are unused. It will report any useless patterns as well as any pattern values that are not used.
+This rule looks within function arguments, let functions and lambdas to find any values that are unused. It will report any parameters that are not used.
+
+
+## Fixes for lambdas
+
+We're only offering fixes for lambdas here because we believe unused parameters in functions are a code smell that should be refactored.
 
 
 ## Fail
 
 Value `something` is not used:
 
-    case maybe of
-        Just something ->
-            True
-
-        Nothing ->
-            False
+    add1 number =
+        1
 
 
 ## Success
 
-    case maybe of
-        Just _ ->
-            True
-
-        Nothing ->
-            False
+    add1 number =
+        number + 1
 
 -}
 rule : Rule
 rule =
-    Rule.newModuleRuleSchema "NoUnused.Patterns" initialContext
+    Rule.newModuleRuleSchema "NoUnused.Parameters" initialContext
+        |> Rule.withDeclarationVisitor declarationVisitor
         |> Rule.withExpressionVisitor expressionVisitor
         |> NameVisitor.withValueVisitor valueVisitor
         |> Rule.fromModuleRuleSchema
 
 
+declarationVisitor : Node Declaration -> Rule.Direction -> Context -> ( List (Rule.Error {}), Context )
+declarationVisitor node direction context =
+    case ( direction, Node.value node ) of
+        ( Rule.OnEnter, Declaration.FunctionDeclaration { declaration } ) ->
+            ( [], rememberFunctionImplementation declaration context )
+
+        ( Rule.OnExit, Declaration.FunctionDeclaration { declaration } ) ->
+            errorsForFunctionImplementation declaration context
+
+        _ ->
+            ( [], context )
+
+
 expressionVisitor : Node Expression -> Rule.Direction -> Context -> ( List (Rule.Error {}), Context )
 expressionVisitor (Node _ expression) direction context =
     case ( direction, expression ) of
+        ( Rule.OnEnter, Expression.LambdaExpression { args } ) ->
+            ( [], rememberPatternList args context )
+
+        ( Rule.OnExit, Expression.LambdaExpression { args } ) ->
+            errorsForPatternList Lambda args context
+
         ( Rule.OnEnter, Expression.LetExpression { declarations } ) ->
             ( [], rememberLetDeclarationList declarations context )
 
         ( Rule.OnExit, Expression.LetExpression { declarations } ) ->
             errorsForLetDeclarationList declarations context
-
-        ( Rule.OnEnter, Expression.CaseExpression { cases } ) ->
-            ( [], rememberCaseList cases context )
-
-        ( Rule.OnExit, Expression.CaseExpression { cases } ) ->
-            errorsForCaseList cases context
 
         _ ->
             ( [], context )
@@ -93,14 +105,9 @@ valueVisitor (Node _ ( moduleName, value )) context =
 --- ON ENTER
 
 
-rememberCaseList : List Expression.Case -> Context -> Context
-rememberCaseList list context =
-    List.foldl rememberCase context list
-
-
-rememberCase : Expression.Case -> Context -> Context
-rememberCase ( pattern, _ ) context =
-    rememberPattern pattern context
+rememberFunctionImplementation : Node Expression.FunctionImplementation -> Context -> Context
+rememberFunctionImplementation (Node _ { arguments }) context =
+    rememberPatternList arguments context
 
 
 rememberLetDeclarationList : List (Node Expression.LetDeclaration) -> Context -> Context
@@ -111,11 +118,16 @@ rememberLetDeclarationList list context =
 rememberLetDeclaration : Node Expression.LetDeclaration -> Context -> Context
 rememberLetDeclaration (Node _ letDeclaration) context =
     case letDeclaration of
-        Expression.LetFunction _ ->
+        Expression.LetFunction { declaration } ->
+            rememberLetFunctionImplementation declaration context
+
+        Expression.LetDestructuring _ _ ->
             context
 
-        Expression.LetDestructuring pattern _ ->
-            rememberPattern pattern context
+
+rememberLetFunctionImplementation : Node Expression.FunctionImplementation -> Context -> Context
+rememberLetFunctionImplementation (Node _ { arguments }) context =
+    rememberPatternList arguments context
 
 
 rememberPatternList : List (Node Pattern) -> Context -> Context
@@ -172,12 +184,12 @@ rememberValueList list context =
 
 singularDetails : List String
 singularDetails =
-    [ "You should either use this value somewhere, or remove it at the location I pointed at." ]
+    [ "You should either use this parameter somewhere, or remove it at the location I pointed at." ]
 
 
 pluralDetails : List String
 pluralDetails =
-    [ "You should either use these values somewhere, or remove them at the location I pointed at." ]
+    [ "You should either use these parameters somewhere, or remove them at the location I pointed at." ]
 
 
 removeDetails : List String
@@ -197,21 +209,9 @@ andThen function ( errors, context ) =
     ( newErrors ++ errors, newContext )
 
 
-errorsForCaseList : List Expression.Case -> Context -> ( List (Rule.Error {}), Context )
-errorsForCaseList list context =
-    case list of
-        [] ->
-            ( [], context )
-
-        first :: rest ->
-            context
-                |> errorsForCase first
-                |> andThen (errorsForCaseList rest)
-
-
-errorsForCase : Expression.Case -> Context -> ( List (Rule.Error {}), Context )
-errorsForCase ( pattern, _ ) context =
-    errorsForPattern Matching pattern context
+errorsForFunctionImplementation : Node Expression.FunctionImplementation -> Context -> ( List (Rule.Error {}), Context )
+errorsForFunctionImplementation (Node _ { arguments }) context =
+    errorsForPatternList Function arguments context
 
 
 errorsForLetDeclarationList : List (Node Expression.LetDeclaration) -> Context -> ( List (Rule.Error {}), Context )
@@ -229,16 +229,21 @@ errorsForLetDeclarationList list context =
 errorsForLetDeclaration : Node Expression.LetDeclaration -> Context -> ( List (Rule.Error {}), Context )
 errorsForLetDeclaration (Node _ letDeclaration) context =
     case letDeclaration of
-        Expression.LetFunction _ ->
+        Expression.LetFunction { declaration } ->
+            errorsForLetFunctionImplementation declaration context
+
+        Expression.LetDestructuring _ _ ->
             ( [], context )
 
-        Expression.LetDestructuring pattern _ ->
-            errorsForPattern Destructuring pattern context
+
+errorsForLetFunctionImplementation : Node Expression.FunctionImplementation -> Context -> ( List (Rule.Error {}), Context )
+errorsForLetFunctionImplementation (Node _ { arguments }) context =
+    errorsForPatternList Function arguments context
 
 
 type PatternUse
-    = Destructuring
-    | Matching
+    = Lambda
+    | Function
 
 
 errorsForPatternList : PatternUse -> List (Node Pattern) -> Context -> ( List (Rule.Error {}), Context )
@@ -260,16 +265,16 @@ errorsForPattern use (Node range pattern) context =
             ( [], context )
 
         Pattern.VarPattern value ->
-            errorsForValue value range context
+            errorsForValue use value range context
 
         Pattern.RecordPattern values ->
-            errorsForRecordValueList range values context
+            errorsForRecordValueList use range values context
 
         Pattern.TuplePattern [ Node _ Pattern.AllPattern, Node _ Pattern.AllPattern ] ->
-            errorsForUselessTuple range context
+            errorsForUselessTuple use range context
 
         Pattern.TuplePattern [ Node _ Pattern.AllPattern, Node _ Pattern.AllPattern, Node _ Pattern.AllPattern ] ->
-            errorsForUselessTuple range context
+            errorsForUselessTuple use range context
 
         Pattern.TuplePattern patterns ->
             errorsForPatternList use patterns context
@@ -281,15 +286,15 @@ errorsForPattern use (Node range pattern) context =
             errorsForPatternList use patterns context
 
         Pattern.NamedPattern _ patterns ->
-            if use == Destructuring && List.all isAllPattern patterns then
-                errorsForUselessNamePattern range context
+            if List.all isAllPattern patterns then
+                errorsForUselessNamePattern use range context
 
             else
                 errorsForPatternList use patterns context
 
         Pattern.AsPattern inner name ->
             context
-                |> errorsForAsPattern range inner name
+                |> errorsForAsPattern use range inner name
                 |> andThen (errorsForPattern use inner)
 
         Pattern.ParenthesizedPattern inner ->
@@ -299,34 +304,52 @@ errorsForPattern use (Node range pattern) context =
             ( [], context )
 
 
-errorsForUselessNamePattern : Range -> Context -> ( List (Rule.Error {}), Context )
-errorsForUselessNamePattern range context =
+errorsForUselessNamePattern : PatternUse -> Range -> Context -> ( List (Rule.Error {}), Context )
+errorsForUselessNamePattern use range context =
+    let
+        fix =
+            case use of
+                Lambda ->
+                    [ Fix.replaceRangeBy range "_" ]
+
+                Function ->
+                    []
+    in
     ( [ Rule.errorWithFix
             { message = "Named pattern is not needed."
             , details = removeDetails
             }
             range
-            [ Fix.replaceRangeBy range "_" ]
+            fix
       ]
     , context
     )
 
 
-errorsForUselessTuple : Range -> Context -> ( List (Rule.Error {}), Context )
-errorsForUselessTuple range context =
+errorsForUselessTuple : PatternUse -> Range -> Context -> ( List (Rule.Error {}), Context )
+errorsForUselessTuple use range context =
+    let
+        fix =
+            case use of
+                Lambda ->
+                    [ Fix.replaceRangeBy range "_" ]
+
+                Function ->
+                    []
+    in
     ( [ Rule.errorWithFix
             { message = "Tuple pattern is not needed."
             , details = removeDetails
             }
             range
-            [ Fix.replaceRangeBy range "_" ]
+            fix
       ]
     , context
     )
 
 
-errorsForRecordValueList : Range -> List (Node String) -> Context -> ( List (Rule.Error {}), Context )
-errorsForRecordValueList recordRange list context =
+errorsForRecordValueList : PatternUse -> Range -> List (Node String) -> Context -> ( List (Rule.Error {}), Context )
+errorsForRecordValueList use recordRange list context =
     let
         ( unused, used ) =
             List.partition (\(Node _ value) -> Set.member value context) list
@@ -343,25 +366,30 @@ errorsForRecordValueList recordRange list context =
                 rest =
                     List.map Node.value restNodes
 
-                ( errorRange, fix ) =
-                    case used of
-                        [] ->
-                            ( recordRange, Fix.replaceRangeBy recordRange "_" )
+                errorRange =
+                    Range.combine (List.map Node.range unused)
 
-                        _ ->
-                            ( Range.combine (List.map Node.range unused)
-                            , Node Range.emptyRange (Pattern.RecordPattern used)
+                fix =
+                    case ( use, used ) of
+                        ( Lambda, [] ) ->
+                            [ Fix.replaceRangeBy recordRange "_" ]
+
+                        ( Lambda, _ ) ->
+                            [ Node Range.emptyRange (Pattern.RecordPattern used)
                                 |> Writer.writePattern
                                 |> Writer.write
                                 |> Fix.replaceRangeBy recordRange
-                            )
+                            ]
+
+                        ( Function, _ ) ->
+                            []
             in
             ( [ Rule.errorWithFix
                     { message = listToMessage first rest
                     , details = listToDetails first rest
                     }
                     errorRange
-                    [ fix ]
+                    fix
               ]
             , List.foldl forgetNode context unused
             )
@@ -371,10 +399,10 @@ listToMessage : String -> List String -> String
 listToMessage first rest =
     case List.reverse rest of
         [] ->
-            "Value `" ++ first ++ "` is not used."
+            "Parameter `" ++ first ++ "` is not used."
 
         last :: middle ->
-            "Values `" ++ String.join "`, `" (first :: middle) ++ "` and `" ++ last ++ "` are not used."
+            "Parameters `" ++ String.join "`, `" (first :: middle) ++ "` and `" ++ last ++ "` are not used."
 
 
 listToDetails : String -> List String -> List String
@@ -387,16 +415,21 @@ listToDetails _ rest =
             pluralDetails
 
 
-errorsForAsPattern : Range -> Node Pattern -> Node String -> Context -> ( List (Rule.Error {}), Context )
-errorsForAsPattern patternRange inner (Node range name) context =
+errorsForAsPattern : PatternUse -> Range -> Node Pattern -> Node String -> Context -> ( List (Rule.Error {}), Context )
+errorsForAsPattern use patternRange inner (Node range name) context =
     if Set.member name context then
         let
             fix =
-                [ inner
-                    |> Writer.writePattern
-                    |> Writer.write
-                    |> Fix.replaceRangeBy patternRange
-                ]
+                case use of
+                    Lambda ->
+                        [ inner
+                            |> Writer.writePattern
+                            |> Writer.write
+                            |> Fix.replaceRangeBy patternRange
+                        ]
+
+                    Function ->
+                        []
         in
         ( [ Rule.errorWithFix
                 { message = "Pattern alias `" ++ name ++ "` is not used."
@@ -451,15 +484,24 @@ initialContext =
     Set.empty
 
 
-errorsForValue : String -> Range -> Context -> ( List (Rule.Error {}), Context )
-errorsForValue value range context =
+errorsForValue : PatternUse -> String -> Range -> Context -> ( List (Rule.Error {}), Context )
+errorsForValue use value range context =
     if Set.member value context then
+        let
+            fix =
+                case use of
+                    Lambda ->
+                        [ Fix.replaceRangeBy range "_" ]
+
+                    Function ->
+                        []
+        in
         ( [ Rule.errorWithFix
-                { message = "Value `" ++ value ++ "` is not used."
+                { message = "Parameter `" ++ value ++ "` is not used."
                 , details = singularDetails
                 }
                 range
-                [ Fix.replaceRangeBy range "_" ]
+                fix
           ]
         , Set.remove value context
         )
