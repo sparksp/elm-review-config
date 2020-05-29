@@ -28,7 +28,7 @@ These are the rules that I like to follow - you might not like them. If you like
 
 3. Add `elm-review-config` as a submodule:
     ```
-    $ git submodule add git@github.com:sparksp/elm-review-config.git review
+    $ git submodule add -b master git@github.com:sparksp/elm-review-config.git review
 
     $ git submodule update --init --recursive review
     ```
