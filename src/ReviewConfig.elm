@@ -73,3 +73,8 @@ config =
                 , "src/Svg/Tailwind.elm"
                 ]
             )
+        |> List.map
+            (Rule.ignoreErrorsForDirectories
+                [ "gen"
+                ]
+            )
