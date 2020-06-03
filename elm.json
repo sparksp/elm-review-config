@@ -17,7 +17,11 @@
             "sparksp/elm-review-camelcase": "1.0.2",
             "sparksp/elm-review-forbidden-words": "1.0.0",
             "sparksp/elm-review-ports": "1.2.0",
-            "stil4m/elm-syntax": "7.1.1"
+            "stil4m/elm-syntax": "7.1.1",
+            "truqu/elm-review-nobooleancase": "1.0.0",
+            "truqu/elm-review-noleftpizza": "1.0.0",
+            "truqu/elm-review-noredundantconcat": "1.0.0",
+            "truqu/elm-review-noredundantcons": "1.0.0"
         },
         "indirect": {
             "elm/html": "1.0.0",
