@@ -12,6 +12,7 @@
             "jfmengels/elm-review": "2.1.1",
             "jfmengels/review-common": "1.1.0",
             "jfmengels/review-debug": "2.0.1",
+            "jfmengels/review-tea": "1.1.0",
             "jfmengels/review-unused": "2.1.1",
             "sparksp/elm-review-always": "1.0.3",
             "sparksp/elm-review-camelcase": "1.0.2",
