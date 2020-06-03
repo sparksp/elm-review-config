@@ -1,13 +1,17 @@
 module ReviewConfig exposing (config)
 
 import NoAlways
+import NoBooleanCase
 import NoDebug.Log
 import NoDebug.TodoOrToString
 import NoDuplicatePorts
 import NoExposingEverything
 import NoForbiddenWords
 import NoImportingEverything
+import NoLeftPizza
 import NoMissingTypeAnnotation
+import NoRedundantConcat
+import NoRedundantCons
 import NoUnsafePorts
 import NoUnused.CustomTypeConstructors
 import NoUnused.Dependencies
@@ -19,13 +23,9 @@ import NoUnused.Variables
 import NoUnusedPorts
 import Review.Rule as Rule exposing (Rule)
 import UseCamelCase
-import Vendor.NoBooleanCase as NoBooleanCase
 import Vendor.NoFullyAppliedPrefixOperator as NoFullyAppliedPrefixOperator
-import Vendor.NoLeftPizza as NoLeftPizza
 import Vendor.NoMissingSubscriptionsCall as NoMissingSubscriptionsCall
 import Vendor.NoRecursiveUpdate as NoRecursiveUpdate
-import Vendor.NoRedundantConcat as NoRedundantConcat
-import Vendor.NoRedundantCons as NoRedundantCons
 import Vendor.NoUselessSubscriptions as NoUselessSubscriptions
 
 
