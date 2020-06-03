@@ -9,7 +9,9 @@ import NoExposingEverything
 import NoForbiddenWords
 import NoImportingEverything
 import NoLeftPizza
+import NoMissingSubscriptionsCall
 import NoMissingTypeAnnotation
+import NoRecursiveUpdate
 import NoRedundantConcat
 import NoRedundantCons
 import NoUnsafePorts
@@ -21,12 +23,10 @@ import NoUnused.Parameters
 import NoUnused.Patterns
 import NoUnused.Variables
 import NoUnusedPorts
+import NoUselessSubscriptions
 import Review.Rule as Rule exposing (Rule)
 import UseCamelCase
 import Vendor.NoFullyAppliedPrefixOperator as NoFullyAppliedPrefixOperator
-import Vendor.NoMissingSubscriptionsCall as NoMissingSubscriptionsCall
-import Vendor.NoRecursiveUpdate as NoRecursiveUpdate
-import Vendor.NoUselessSubscriptions as NoUselessSubscriptions
 
 
 config : List Rule
