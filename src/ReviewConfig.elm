@@ -7,7 +7,6 @@ import NoDebug.Log
 import NoDebug.TodoOrToString
 import NoDuplicatePorts
 import NoExposingEverything
-import NoForbiddenWords
 import NoImportingEverything
 import NoInconsistentAliases
 import NoLeftPizza
@@ -48,11 +47,6 @@ config =
             ]
     , NoDuplicatePorts.rule
     , NoExposingEverything.rule
-    , NoForbiddenWords.rule
-        [ "- [ ]"
-        , "REPLACEME"
-        , "TODO"
-        ]
     , NoFullyAppliedPrefixOperator.rule
     , NoImportingEverything.rule []
     , NoInconsistentAliases.config
