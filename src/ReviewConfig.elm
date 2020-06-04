@@ -1,5 +1,6 @@
 module ReviewConfig exposing (config)
 
+import Documentation.ReadmeLinksPointToCurrentVersion
 import NoAlways
 import NoBooleanCase
 import NoDebug.Log
@@ -31,7 +32,8 @@ import Vendor.NoFullyAppliedPrefixOperator as NoFullyAppliedPrefixOperator
 
 config : List Rule
 config =
-    [ NoAlways.rule
+    [ Documentation.ReadmeLinksPointToCurrentVersion.rule
+    , NoAlways.rule
     , NoBooleanCase.rule
     , NoDebug.Log.rule
     , NoDebug.TodoOrToString.rule
