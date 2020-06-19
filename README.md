@@ -8,9 +8,24 @@ I like all of my projects to follow the same rules so I've created a single repo
 
 For unpublished rules copied from somewhere else I have extracted them in to `src/Vendor/` and also included a git submodule in `vendor/`.  The submodule helps me to keep track of any upstream changes and also keeps a full reference to the source, including any license they may have.
 
+
 ## Here be dragons!
 
 These are the rules that I like to follow - you might not like them. If you like to have different rules per-project then this approach is not for you! You could use this as a template instead to get your review up and running quickly.
+
+
+## Use this as a standalone config
+
+1. Clone this config somewhere:
+    ```
+    $ git clone git@github.com:sparksp/elm-review-config.git
+    ```
+
+2. From your project, run elm-review with this config:
+    ```
+    $ elm-review --config /path/to/elm-review-config
+    ```
+
 
 ## To add this to a project (as a submodule)
 
