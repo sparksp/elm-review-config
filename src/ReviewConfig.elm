@@ -37,6 +37,10 @@ config =
     , NoBooleanCase.rule
     , NoDebug.Log.rule
     , NoDebug.TodoOrToString.rule
+        |> Rule.ignoreErrorsForDirectories
+            [ -- Debug.toString is sometimes used in test failure messages.
+              "tests/"
+            ]
     , NoDuplicatePorts.rule
     , NoExposingEverything.rule
     , NoForbiddenWords.rule
