@@ -49,12 +49,17 @@ config =
         ]
     , NoFullyAppliedPrefixOperator.rule
     , NoImportingEverything.rule []
-    , NoLeftPizza.rule
+    , NoLeftPizza.rule NoLeftPizza.Any
         |> Rule.ignoreErrorsForDirectories
             [ -- Test functions are traditionally built up using a left pizza.
               -- While we don't want them in our regular code, let's allow them
               -- just for tests.
               "tests/"
+            ]
+    , NoLeftPizza.rule NoLeftPizza.Redundant
+        |> Rule.ignoreErrorsForDirectories
+            [ -- Only check tests for redundant left pizza.
+              "src/"
             ]
     , NoMissingSubscriptionsCall.rule
     , NoMissingTypeAnnotation.rule
