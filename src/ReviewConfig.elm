@@ -12,6 +12,7 @@ import NoImportingEverything
 import NoLeftPizza
 import NoMissingSubscriptionsCall
 import NoMissingTypeAnnotation
+import NoMissingTypeExpose
 import NoRecursiveUpdate
 import NoRedundantConcat
 import NoRedundantCons
@@ -63,6 +64,7 @@ config =
             ]
     , NoMissingSubscriptionsCall.rule
     , NoMissingTypeAnnotation.rule
+    , NoMissingTypeExpose.rule
     , NoRecursiveUpdate.rule
     , NoRedundantConcat.rule
     , NoRedundantCons.rule
