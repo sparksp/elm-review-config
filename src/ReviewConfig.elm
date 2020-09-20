@@ -12,11 +12,13 @@ import NoImportingEverything
 import NoLeftPizza
 import NoMissingSubscriptionsCall
 import NoMissingTypeAnnotation
+import NoMissingTypeAnnotationInLetIn
 import NoMissingTypeExpose
 import NoRecursiveUpdate
 import NoRedundantConcat
 import NoRedundantCons
 import NoUnsafePorts
+import NoUnused.CustomTypeConstructorArgs
 import NoUnused.CustomTypeConstructors
 import NoUnused.Dependencies
 import NoUnused.Exports
@@ -46,6 +48,7 @@ config =
     , NoExposingEverything.rule
     , NoForbiddenWords.rule
         [ "- [ ]"
+        , "REPLACEME"
         , "TODO"
         ]
     , NoFullyAppliedPrefixOperator.rule
@@ -64,12 +67,14 @@ config =
             ]
     , NoMissingSubscriptionsCall.rule
     , NoMissingTypeAnnotation.rule
+    , NoMissingTypeAnnotationInLetIn.rule
     , NoMissingTypeExpose.rule
     , NoRecursiveUpdate.rule
     , NoRedundantConcat.rule
     , NoRedundantCons.rule
     , NoUnsafePorts.rule NoUnsafePorts.any
     , NoUnused.CustomTypeConstructors.rule []
+    , NoUnused.CustomTypeConstructorArgs.rule
     , NoUnused.Dependencies.rule
     , NoUnused.Exports.rule
     , NoUnused.Modules.rule
