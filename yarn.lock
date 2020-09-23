@@ -131,7 +131,7 @@ elm-format@^0.8.3:
   dependencies:
     binwrap "^0.2.2"
 
-elm-json@^0.2.7:
+elm-json@^0.2.8:
   version "0.2.8"
   resolved "https://registry.yarnpkg.com/elm-json/-/elm-json-0.2.8.tgz#20ec42039b62c624d1369cda6318e160ad553094"
   integrity sha512-YfK39CNrHjB4LMnas6aAb2LP37YgqAnh69bWD7ojAs7lBNNkWIeBifeszAfmapylQt1MVuwj6zPPYwrqRQXEBA==
