@@ -9,11 +9,13 @@ import NoDuplicatePorts
 import NoExposingEverything
 import NoForbiddenWords
 import NoImportingEverything
+import NoInconsistentAliases
 import NoLeftPizza
 import NoMissingSubscriptionsCall
 import NoMissingTypeAnnotation
 import NoMissingTypeAnnotationInLetIn
 import NoMissingTypeExpose
+import NoModuleOnExposedNames
 import NoRecursiveUpdate
 import NoRedundantConcat
 import NoRedundantCons
@@ -53,6 +55,13 @@ config =
         ]
     , NoFullyAppliedPrefixOperator.rule
     , NoImportingEverything.rule []
+    , NoInconsistentAliases.config
+        [ ( "Html.Attributes", "Attr" )
+        , ( "Json.Decode", "Decode" )
+        , ( "Json.Encode", "Encode" )
+        ]
+        |> NoInconsistentAliases.noMissingAliases
+        |> NoInconsistentAliases.rule
     , NoLeftPizza.rule NoLeftPizza.Any
         |> Rule.ignoreErrorsForDirectories
             [ -- Test functions are traditionally built up using a left pizza.
@@ -69,6 +78,7 @@ config =
     , NoMissingTypeAnnotation.rule
     , NoMissingTypeAnnotationInLetIn.rule
     , NoMissingTypeExpose.rule
+    , NoModuleOnExposedNames.rule
     , NoRecursiveUpdate.rule
     , NoRedundantConcat.rule
     , NoRedundantCons.rule
