@@ -30,7 +30,7 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Add yarn bin to path
-        run: echo ::add-path::$(yarn bin)
+        run: yarn bin >> $GITHUB_PATH
       - name: Build
         run: elm make src/ReviewConfig.elm --output /dev/null
 
@@ -54,7 +54,7 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Add yarn bin to path
-        run: echo ::add-path::$(yarn bin)
+        run: yarn bin >> $GITHUB_PATH
       - name: Run elm-format
         uses: sparksp/elm-format-action@v1
         with:
