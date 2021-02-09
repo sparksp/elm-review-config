@@ -1,3 +1,4 @@
 [submodule "vendor/review-simplification"]
 	path = vendor/review-simplification
 	url = https://github.com/jfmengels/review-simplification.git
+	branch = master
