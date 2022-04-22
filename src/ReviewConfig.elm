@@ -19,6 +19,7 @@ import NoMissingTypeAnnotation
 import NoMissingTypeAnnotationInLetIn
 import NoMissingTypeExpose
 import NoModuleOnExposedNames
+import NoRecordAliasConstructor
 import NoRecursiveUpdate
 import NoRedundantConcat
 import NoRedundantCons
@@ -89,6 +90,7 @@ config =
     , NoMissingTypeAnnotationInLetIn.rule
     , NoMissingTypeExpose.rule
     , NoModuleOnExposedNames.rule
+    , NoRecordAliasConstructor.rule
     , NoRecursiveUpdate.rule
     , NoRedundantConcat.rule
     , NoRedundantCons.rule
