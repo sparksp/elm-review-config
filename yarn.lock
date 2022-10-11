@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-elm-tooling@^1.7.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/elm-tooling/-/elm-tooling-1.7.0.tgz#c365b3f7aa21ee67eb4104136c146d500d1887f4"
-  integrity sha512-EHZ54voWrG3BhUONbH/wFw5U95H6N7R4QFgXHDrPIaDBDdeyNkpFu4QWArSWkhzxyCF7hqT8ya2yy7SferDsgg==
+elm-tooling@^1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/elm-tooling/-/elm-tooling-1.9.0.tgz#71112b96f031905f99b9bcc841e2dd9b1d1d71e4"
+  integrity sha512-FuMsshhsnjAizktA/j5JWLHLHZDt6CSmXbGQZtgOTNz86Z9eUxTupoZZ8czpW2aRWBUiD6IhJNWDQjJsgNuEIg==
