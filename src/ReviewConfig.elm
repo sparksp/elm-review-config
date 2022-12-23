@@ -37,8 +37,8 @@ import NoUnused.Variables
 import NoUnusedPorts
 import NoUselessSubscriptions
 import Review.Rule as Rule exposing (Rule)
+import Simplify
 import UseCamelCase
-import Vendor.NoFullyAppliedPrefixOperator as NoFullyAppliedPrefixOperator
 
 
 config : List Rule
@@ -65,7 +65,6 @@ config =
         , "REPLACEME"
         , "TODO"
         ]
-    , NoFullyAppliedPrefixOperator.rule
     , NoImportingEverything.rule []
     , NoInconsistentAliases.config
         [ ( "Html.Attributes", "Attr" )
@@ -108,6 +107,7 @@ config =
     , NoUnusedPorts.rule
     , NoUnused.Variables.rule
     , NoUselessSubscriptions.rule
+    , Simplify.rule Simplify.defaults
     , UseCamelCase.rule UseCamelCase.default
     ]
         |> List.map
