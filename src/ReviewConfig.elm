@@ -23,6 +23,7 @@ import NoRecordAliasConstructor
 import NoRecursiveUpdate
 import NoRedundantConcat
 import NoRedundantCons
+import NoUnmatchedUnit
 import NoUnoptimizedRecursion
 import NoUnsafePorts
 import NoUnused.CustomTypeConstructorArgs
@@ -94,6 +95,7 @@ config =
     , NoRecursiveUpdate.rule
     , NoRedundantConcat.rule
     , NoRedundantCons.rule
+    , NoUnmatchedUnit.rule
     , NoUnoptimizedRecursion.rule (NoUnoptimizedRecursion.optOutWithComment "IGNORE TCO")
     , NoUnsafePorts.rule NoUnsafePorts.any
     , NoUnused.CustomTypeConstructors.rule []
