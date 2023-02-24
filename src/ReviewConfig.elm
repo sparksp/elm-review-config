@@ -5,7 +5,6 @@ import Docs.ReviewAtDocs
 import Docs.ReviewLinksAndSections
 import Docs.UpToDateReadmeLinks
 import NoAlways
-import NoBooleanCase
 import NoDebug.Log
 import NoDebug.TodoOrToString
 import NoDuplicatePorts
@@ -21,8 +20,6 @@ import NoMissingTypeExpose
 import NoModuleOnExposedNames
 import NoRecordAliasConstructor
 import NoRecursiveUpdate
-import NoRedundantConcat
-import NoRedundantCons
 import NoUnmatchedUnit
 import NoUnoptimizedRecursion
 import NoUnsafePorts
@@ -51,7 +48,6 @@ config =
     , Docs.ReviewAtDocs.rule
     , Docs.UpToDateReadmeLinks.rule
     , NoAlways.rule
-    , NoBooleanCase.rule
     , NoDebug.Log.rule
     , NoDebug.TodoOrToString.rule
         |> Rule.ignoreErrorsForDirectories
@@ -92,8 +88,6 @@ config =
     , NoModuleOnExposedNames.rule
     , NoRecordAliasConstructor.rule
     , NoRecursiveUpdate.rule
-    , NoRedundantConcat.rule
-    , NoRedundantCons.rule
     , NoUnmatchedUnit.rule
     , NoUnoptimizedRecursion.rule (NoUnoptimizedRecursion.optOutWithComment "IGNORE TCO")
     , NoUnsafePorts.rule NoUnsafePorts.any
