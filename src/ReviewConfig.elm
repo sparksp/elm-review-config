@@ -34,11 +34,11 @@ import NoUnusedPorts
 import NoUselessSubscriptions
 import Review.Rule as Rule exposing (Rule)
 import ReviewPipelineStyles
+import ReviewPipelineStyles.Custom exposing (noSinglePiplinesWithSimpleInputs)
 import ReviewPipelineStyles.Premade
     exposing
         ( noMultilineLeftPizza
         , noPipelinesWithConfusingNonCommutativeFunctions
-        , noPipelinesWithSimpleInputs
         , noRepeatedParentheticalApplication
         , noSemanticallyInfixFunctionsInLeftPipelines
         , noSingleLineRightPizza
@@ -102,7 +102,7 @@ config =
         List.concat
             [ noMultilineLeftPizza
             , noSingleLineRightPizza
-            , noPipelinesWithSimpleInputs
+            , noSinglePiplinesWithSimpleInputs
             , noRepeatedParentheticalApplication
             , noPipelinesWithConfusingNonCommutativeFunctions
             , noSemanticallyInfixFunctionsInLeftPipelines
