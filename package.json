@@ -5,6 +5,6 @@
     "test": "elm-format --yes src/ && elm make src/ReviewConfig.elm --output=/dev/null"
   },
   "dependencies": {
-    "elm-tooling": "^1.14.0"
+    "elm-tooling": "^1.15.0"
   }
 }
